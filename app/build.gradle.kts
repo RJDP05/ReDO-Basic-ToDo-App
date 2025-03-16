@@ -1,6 +1,7 @@
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.jetbrains.kotlin.android)
+    id("com.google.devtools.ksp")
 }
 
 android {
@@ -17,6 +18,12 @@ android {
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
             useSupportLibrary = true
+        }
+
+        javaCompileOptions {
+            annotationProcessorOptions {
+                arguments["room.schemaLocation"] = "$projectDir/schemas".toString()
+            }
         }
     }
 
@@ -70,4 +77,17 @@ dependencies {
     //My dependencies
     implementation(libs.androidx.navigation.compose)
     implementation(libs.androidx.runtime.livedata)
+
+    val room_version = "2.6.1"
+
+    implementation(libs.androidx.room.runtime)
+
+    // If this project uses any Kotlin source, use Kotlin Symbol Processing (KSP)
+    // See Add the KSP plugin to your project
+    ksp(libs.androidx.room.compiler)
+
+    // If this project only uses Java source, use the Java annotationProcessor
+    // No additional plugins are necessary
+    annotationProcessor(libs.androidx.room.compiler)
+
 }
